@@ -194,7 +194,7 @@ Developed with ❤️ by **Team PulseCoders** for **TetraTHON 2026 (HealthTech T
 | Name | Role | Contact |
 | :--- | :--- | :--- |
 | **Krish Patel** | Lead Developer / AI Systems | [krishpatel27x@gmail.com](mailto:krishpatel27x@gmail.com) |
-| **Varun Prajapati** |  Backend & ML Engineer| [Vnp785@gmail.com](mailto:Vnp785@gmail.com) |
+| **Varun Prajapati** |   Backend & ML Engineer| [Vnp785@gmail.com](mailto:Vnp785@gmail.com) |
 | **Rudra Manger** | Full-Stack & UI/UX Developer | [rudramanger2006@gmail.com](mailto:rudramanger2006@gmail.com) |
 
 ---
