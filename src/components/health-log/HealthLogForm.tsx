@@ -19,18 +19,18 @@ import { cn } from "@/lib/utils";
 // ─── Schemas per tab ──────────────────────────────────────────────────────────
 
 const vitalsSchema = z.object({
-  systolic: z.number({ invalid_type_error: "Required" }).min(50, "Too low").max(300, "Too high"),
-  diastolic: z.number({ invalid_type_error: "Required" }).min(30, "Too low").max(200, "Too high"),
+  systolic: z.number({ message: "Required" }).min(50, "Too low").max(300, "Too high"),
+  diastolic: z.number({ message: "Required" }).min(30, "Too low").max(200, "Too high"),
   heartRate: z.number().min(30).max(250).optional().or(z.literal(undefined)),
 });
 
 const sugarSchema = z.object({
-  bloodSugar: z.number({ invalid_type_error: "Required" }).min(20).max(600),
+  bloodSugar: z.number({ message: "Required" }).min(20).max(600),
   sugarTiming: z.enum(["fasting", "post-meal", "random"]),
 });
 
 const weightSchema = z.object({
-  weight: z.number({ invalid_type_error: "Required" }).min(10).max(300),
+  weight: z.number({ message: "Required" }).min(10).max(300),
 });
 
 const medicationSchema = z.object({
@@ -41,13 +41,13 @@ const medicationSchema = z.object({
 });
 
 const sleepSchema = z.object({
-  sleepHours: z.number({ invalid_type_error: "Required" }).min(0).max(24),
+  sleepHours: z.number({ message: "Required" }).min(0).max(24),
   sleepQuality: z.number().min(1).max(5),
 });
 
 const activitySchema = z.object({
   activityType: z.string().min(2, "Activity type required"),
-  activityDuration: z.number({ invalid_type_error: "Required" }).min(1).max(600),
+  activityDuration: z.number({ message: "Required" }).min(1).max(600),
   steps: z.number().min(0).optional().or(z.literal(undefined)),
 });
 

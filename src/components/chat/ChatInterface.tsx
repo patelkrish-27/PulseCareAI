@@ -104,7 +104,7 @@ export function ChatInterface() {
   const [isTyping, setIsTyping] = useState(false);
   const [listening, setListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const recogRef = useRef<SpeechRecognition | null>(null);
+  const recogRef = useRef<any | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-scroll
@@ -133,13 +133,13 @@ export function ChatInterface() {
   // Voice
   const startVoice = useCallback(() => {
     const SR =
-      window.SpeechRecognition ||
-      (window as unknown as { webkitSpeechRecognition: typeof SpeechRecognition }).webkitSpeechRecognition;
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
     if (!SR) { alert("Voice input not supported in this browser."); return; }
     const r = new SR();
     r.lang = chatLanguage === "hi" ? "hi-IN" : "en-IN";
     r.interimResults = false;
-    r.onresult = (e) => {
+    r.onresult = (e: any) => {
       setInput((prev) => (prev ? prev + " " : "") + e.results[0][0].transcript);
       setListening(false);
     };

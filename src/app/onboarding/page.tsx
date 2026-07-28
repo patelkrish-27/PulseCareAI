@@ -19,16 +19,16 @@ import type { Condition, Language } from "@/lib/db";
 const step1Schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   age: z
-    .number({ invalid_type_error: "Age is required" })
+    .number({ message: "Age is required" })
     .min(1, "Age must be at least 1")
     .max(120, "Please enter a valid age"),
-  gender: z.enum(["Male", "Female", "Other"], { required_error: "Please select gender" }),
-  language: z.enum(["en", "hi"], { required_error: "Please select a language" }),
+  gender: z.enum(["Male", "Female", "Other"], { message: "Please select gender" }),
+  language: z.enum(["en", "hi"], { message: "Please select a language" }),
 });
 
 const step2Schema = z.object({
   condition: z.enum(["Type 2 Diabetes", "Hypertension", "Asthma", "None"], {
-    required_error: "Please select a condition",
+    message: "Please select a condition",
   }),
 });
 

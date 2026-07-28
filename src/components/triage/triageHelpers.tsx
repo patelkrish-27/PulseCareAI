@@ -48,20 +48,20 @@ const STEP_LABELS = ["Symptoms", "Vitals", "Duration", "Review", "Result"];
 
 function useSpeechRecognition(onResult: (text: string) => void) {
   const [listening, setListening] = useState(false);
-  const recogRef = useRef<SpeechRecognition | null>(null);
+  const recogRef = useRef<any | null>(null);
 
   const start = useCallback(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition: typeof SpeechRecognition }).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
+    const SR =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) {
       alert("Speech recognition is not supported in your browser.");
       return;
     }
-    const recog = new SpeechRecognition();
+    const recog = new SR();
     recog.lang = "en-IN";
     recog.interimResults = false;
     recog.maxAlternatives = 1;
-    recog.onresult = (e) => {
+    recog.onresult = (e: any) => {
       onResult(e.results[0][0].transcript);
       setListening(false);
     };
