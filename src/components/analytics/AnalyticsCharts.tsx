@@ -145,7 +145,6 @@ export function AnalyticsCharts() {
   })();
 
   const isDiabetic = profile?.condition === "Type 2 Diabetes";
-  const isHypertensive = profile?.condition === "Hypertension";
 
   if (!loaded) {
     return (

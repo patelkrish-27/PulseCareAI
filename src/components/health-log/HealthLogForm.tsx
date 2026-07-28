@@ -51,6 +51,15 @@ const activitySchema = z.object({
   steps: z.number().min(0).optional().or(z.literal(undefined)),
 });
 
+// ─── Handler types ────────────────────────────────────────────────────────────
+
+type VitalsData = z.infer<typeof vitalsSchema>;
+type SugarData = z.infer<typeof sugarSchema>;
+type WeightData = z.infer<typeof weightSchema>;
+type MedicationData = z.infer<typeof medicationSchema>;
+type SleepData = z.infer<typeof sleepSchema>;
+type ActivityData = z.infer<typeof activitySchema>;
+
 // ─── Tab config ────────────────────────────────────────────────────────────────
 
 const TABS = [
@@ -64,7 +73,7 @@ const TABS = [
 
 // ─── Sub-forms ─────────────────────────────────────────────────────────────────
 
-function VitalsForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
+function VitalsForm({ onSave }: { onSave: (data: VitalsData) => Promise<void> }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(vitalsSchema),
   });
@@ -104,7 +113,7 @@ function VitalsForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
   );
 }
 
-function SugarForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
+function SugarForm({ onSave }: { onSave: (data: SugarData) => Promise<void> }) {
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(sugarSchema),
     defaultValues: { sugarTiming: "fasting" as const },
@@ -144,7 +153,7 @@ function SugarForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
   );
 }
 
-function WeightForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
+function WeightForm({ onSave }: { onSave: (data: WeightData) => Promise<void> }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(weightSchema) });
   return (
     <form onSubmit={handleSubmit(onSave)} className="space-y-4">
@@ -163,7 +172,7 @@ function WeightForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
   );
 }
 
-function MedicationForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
+function MedicationForm({ onSave }: { onSave: (data: MedicationData) => Promise<void> }) {
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(medicationSchema),
     defaultValues: { frequency: "daily" as const },
@@ -212,7 +221,7 @@ function MedicationForm({ onSave }: { onSave: (data: object) => Promise<void> })
   );
 }
 
-function SleepForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
+function SleepForm({ onSave }: { onSave: (data: SleepData) => Promise<void> }) {
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(sleepSchema),
     defaultValues: { sleepQuality: 3 },
@@ -249,7 +258,7 @@ function SleepForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
   );
 }
 
-function ActivityForm({ onSave }: { onSave: (data: object) => Promise<void> }) {
+function ActivityForm({ onSave }: { onSave: (data: ActivityData) => Promise<void> }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(activitySchema) });
   return (
     <form onSubmit={handleSubmit(onSave)} className="space-y-4">
