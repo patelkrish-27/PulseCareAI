@@ -1,0 +1,9 @@
+.agents/
+.gemini/
+.kiro/
+.git/
+.next/
+node_modules/
+nextjs/
+.vercel/
+*.log
