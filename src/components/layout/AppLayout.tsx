@@ -1,23 +1,3 @@
 "use client";
-
-import { Sidebar } from "./Sidebar";
-import { Header } from "./Header";
-
-export function AppLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex h-screen bg-background overflow-hidden font-sans">
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <Sidebar />
-      </div>
-      
-      <div className="flex flex-1 flex-col overflow-hidden w-full max-w-full">
-        <Header />
-        <main className="flex-1 overflow-y-auto bg-surface p-4 md:p-6 lg:p-8">
-          <div className="mx-auto max-w-[1200px] h-full">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
-  );
-}
+import { Sidebar } from "./Sidebar"; import { Header } from "./Header"; import { motion, AnimatePresence } from "framer-motion"; import { usePathname } from "next/navigation";
+export function AppLayout({children}:{children:React.ReactNode}){const pathname=usePathname();return <div className="app-canvas flex h-dvh overflow-hidden selection:bg-primary/20"><div className="hidden border-r border-border/70 lg:flex"><Sidebar/></div><div className="flex min-w-0 flex-1 flex-col"><Header/><main className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-10 lg:py-8"><AnimatePresence mode="wait"><motion.div key={pathname} initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.28,ease:[.2,.8,.2,1]}} className="mx-auto h-full max-w-7xl">{children}</motion.div></AnimatePresence></main></div></div>}

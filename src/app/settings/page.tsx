@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -7,8 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { CheckCircle2 } from "lucide-react";
 
 export default function SettingsPage() {
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
       <div>
@@ -132,9 +140,14 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <div className="flex justify-end gap-4 pt-4">
-          <Button variant="outline">Cancel</Button>
-          <Button>Save Changes</Button>
+        <div className="flex justify-end gap-4 pt-4 items-center">
+          {saved && (
+            <div className="flex items-center gap-2 text-primary text-sm font-medium animate-in fade-in">
+              <CheckCircle2 className="h-4 w-4" /> Settings saved successfully!
+            </div>
+          )}
+          <Button variant="outline" onClick={() => setSaved(false)}>Cancel</Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </div>
       </div>
     </div>

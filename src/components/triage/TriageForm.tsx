@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle2, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, AlertTriangle, Loader2, Info, XCircle } from "lucide-react";
 import { mockUser } from "@/mock/data";
 
 const steps = [
@@ -21,6 +21,14 @@ const steps = [
 
 export function TriageForm() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [assessmentResult, setAssessmentResult] = useState<{
+    level: string;
+    color: string;
+    title: string;
+    description: string;
+    actions: string[];
+  } | null>(null);
   const [formData, setFormData] = useState({
     name: mockUser.name,
     age: mockUser.age.toString(),
@@ -33,8 +41,24 @@ export function TriageForm() {
     additionalNotes: ""
   });
 
-  const handleNext = () => {
-    if (currentStep < steps.length) {
+  const handleNext = async () => {
+    if (currentStep === 5) {
+      setIsSubmitting(true);
+      try {
+        const res = await fetch("/api/triage", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        setAssessmentResult(data);
+        setCurrentStep(6);
+      } catch (err) {
+        console.error("Failed to submit", err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else if (currentStep < steps.length) {
       setCurrentStep(prev => prev + 1);
     }
   };
@@ -150,14 +174,17 @@ export function TriageForm() {
                 {['Less than 24 hours', '1-3 days', '3-7 days', 'More than a week'].map((option) => (
                   <div 
                     key={option}
-                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                    className={`border-2 rounded-lg p-4 cursor-pointer transition-all select-none flex items-center justify-between gap-2 ${
                       formData.duration === option 
-                        ? 'border-primary bg-accent text-primary-foreground/90 font-medium' 
-                        : 'border-border hover:bg-surface-container'
+                        ? 'border-primary bg-primary text-primary-foreground font-semibold shadow-md scale-[1.01]' 
+                        : 'border-border hover:border-primary/50 hover:bg-accent/40'
                     }`}
                     onClick={() => setFormData(prev => ({ ...prev, duration: option }))}
                   >
-                    {option}
+                    <span>{option}</span>
+                    {formData.duration === option && (
+                      <span className="shrink-0 h-5 w-5 rounded-full bg-primary-foreground/20 flex items-center justify-center text-xs">✓</span>
+                    )}
                   </div>
                 ))}
               </div>
@@ -203,19 +230,33 @@ export function TriageForm() {
           </div>
         )}
 
-        {currentStep === 6 && (
+        {currentStep === 6 && assessmentResult && (
           <div className="text-center py-8 space-y-6">
-            <div className="mx-auto w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
-              <CheckCircle2 className="h-8 w-8" />
+            <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center ${
+              assessmentResult.color === 'red' ? 'bg-red-100 text-red-600' :
+              assessmentResult.color === 'yellow' ? 'bg-yellow-100 text-yellow-600' :
+              'bg-green-100 text-green-600'
+            }`}>
+              {assessmentResult.color === 'red' ? <XCircle className="h-8 w-8" /> :
+               assessmentResult.color === 'yellow' ? <Info className="h-8 w-8" /> :
+               <CheckCircle2 className="h-8 w-8" />}
             </div>
             <h3 className="text-2xl font-bold text-on-surface">Assessment Complete</h3>
-            <div className="max-w-md mx-auto bg-surface-container rounded-xl p-6 text-left border">
-              <h4 className="font-semibold text-lg text-primary mb-2">Recommendation: Monitor & Rest</h4>
-              <p className="text-on-surface-variant mb-4">Based on your symptoms, it appears you may be experiencing a mild viral infection. Rest and stay hydrated.</p>
+            <div className={`max-w-md mx-auto bg-surface-container rounded-xl p-6 text-left border ${
+              assessmentResult.color === 'red' ? 'border-red-300' :
+              assessmentResult.color === 'yellow' ? 'border-yellow-300' :
+              'border-green-300'
+            }`}>
+              <h4 className={`font-semibold text-lg mb-2 ${
+                assessmentResult.color === 'red' ? 'text-red-600' :
+                assessmentResult.color === 'yellow' ? 'text-yellow-600' :
+                'text-green-600'
+              }`}>Recommendation: {assessmentResult.title}</h4>
+              <p className="text-on-surface-variant mb-4">{assessmentResult.description}</p>
               <ul className="list-disc pl-5 text-sm space-y-1 text-on-surface-variant">
-                <li>Drink plenty of fluids</li>
-                <li>Rest for 1-2 days</li>
-                <li>Monitor temperature</li>
+                {assessmentResult.actions.map((action, i) => (
+                  <li key={i}>{action}</li>
+                ))}
               </ul>
               <div className="mt-6 pt-4 border-t flex justify-between items-center">
                 <span className="text-sm font-medium">Need more help?</span>
@@ -236,8 +277,16 @@ export function TriageForm() {
             <ChevronLeft className="mr-2 h-4 w-4" /> Back
           </Button>
           
-          <Button onClick={handleNext} className="bg-primary text-primary-foreground hover:bg-primary/90">
-            {currentStep === 5 ? "Submit Assessment" : "Next Step"} <ChevronRight className="ml-2 h-4 w-4" />
+          <Button 
+            onClick={handleNext} 
+            disabled={isSubmitting}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {isSubmitting ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</>
+            ) : (
+              <>{currentStep === 5 ? "Submit Assessment" : "Next Step"} <ChevronRight className="ml-2 h-4 w-4" /></>
+            )}
           </Button>
         </CardFooter>
       )}

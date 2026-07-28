@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LifeBuoy, Book, MessageCircle, Phone } from "lucide-react";
+import Link from "next/link";
 
 export default function HelpPage() {
   return (
@@ -23,7 +24,9 @@ export default function HelpPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-4">Browse our guides on logging vitals, chatting with the AI, and generating reports.</p>
-            <Button variant="outline" className="w-full">View Guides</Button>
+            <Link href="/chat">
+              <Button variant="outline" className="w-full">View Guides</Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -37,7 +40,7 @@ export default function HelpPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-4">Find quick answers to common issues and questions about the platform.</p>
-            <Button variant="outline" className="w-full">Read FAQs</Button>
+            <Button variant="outline" className="w-full" onClick={() => { const el = document.getElementById('faq-section'); el?.scrollIntoView({behavior:'smooth'}); }}>Read FAQs</Button>
           </CardContent>
         </Card>
 
@@ -51,7 +54,9 @@ export default function HelpPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-4">Having technical difficulties? Send us a message and we&apos;ll help you out.</p>
-            <Button variant="outline" className="w-full">Send Message</Button>
+            <Link href="/chat">
+              <Button variant="outline" className="w-full">Send Message</Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -65,7 +70,7 @@ export default function HelpPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-4">Please do not use this app for medical emergencies. Call your local emergency number immediately.</p>
-            <Button className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90">Call Emergency Services</Button>
+            <Button className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => { if(typeof window !== 'undefined') window.location.href='tel:911'; }}>Call Emergency Services</Button>
           </CardContent>
         </Card>
       </div>

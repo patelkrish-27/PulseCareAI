@@ -29,7 +29,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-6">Summary of your vitals, medications taken, and daily step count for the past week.</p>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => window.print()}>
               <Download className="mr-2 h-4 w-4" /> Download PDF
             </Button>
           </CardContent>
@@ -45,7 +45,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-6">Comprehensive review of your health trends, AI assessments, and goals for the month.</p>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={() => window.print()}>
               <Download className="mr-2 h-4 w-4" /> Download PDF
             </Button>
           </CardContent>
@@ -61,7 +61,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-on-surface-variant mb-6">A structured summary designed specifically for your next doctor&apos;s appointment.</p>
-            <Button className="w-full">
+            <Button className="w-full" onClick={() => window.print()}>
               <Download className="mr-2 h-4 w-4" /> Download for Doctor
             </Button>
           </CardContent>

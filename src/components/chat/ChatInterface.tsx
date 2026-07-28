@@ -28,7 +28,7 @@ export function ChatInterface() {
     }
   }, [messages, isTyping]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const newMsg = { id: Date.now().toString(), role: "user", content: input };
@@ -36,16 +36,25 @@ export function ChatInterface() {
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [...messages, newMsg] }),
+      });
+      const data = await res.json();
+      
       const aiResponse = { 
         id: (Date.now() + 1).toString(), 
-        role: "assistant", 
-        content: "Based on your symptoms and current vitals, I recommend getting some rest. However, this is not a medical diagnosis. Would you like me to connect you with a healthcare professional?"
+        role: data.role, 
+        content: data.content
       };
       setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Failed to send message", error);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
