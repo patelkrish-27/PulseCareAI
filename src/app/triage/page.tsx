@@ -1,15 +1,22 @@
 "use client";
 
 import { TriageForm } from "@/components/triage/TriageForm";
+import { Stethoscope } from "lucide-react";
 
 export default function TriagePage() {
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="max-w-2xl mx-auto space-y-5 pb-8">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight text-on-surface">Health Triage</h2>
-        <p className="text-on-surface-variant mt-2">Complete this assessment to help us understand your symptoms and provide guidance.</p>
+        <div className="flex items-center gap-2.5 mb-1">
+          <Stethoscope className="size-5 text-primary" aria-hidden />
+          <p className="eyebrow">AI-powered</p>
+        </div>
+        <h1 className="section-title">Symptom Triage</h1>
+        <p className="text-sm text-muted-foreground mt-2 max-w-lg">
+          Describe your symptoms and get an instant AI-powered triage recommendation.
+          Takes under 2 minutes.
+        </p>
       </div>
-      
       <TriageForm />
     </div>
   );
